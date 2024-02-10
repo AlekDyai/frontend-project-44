@@ -1,37 +1,40 @@
-import readlineSync from 'readline-sync';
-import welcome from './index.js';
+import runBasisOfGameAndGameGeneration from '../index.js';
+import { getRandomNumber, getRandomIndex } from '../utils.js';
 
-const generateRandomNumber = () => Math.floor(Math.random() * 100);
-const generateRandomOperator = () => ['+', '-', '*'][Math.floor(Math.random() * 3)];
-const calculate = (number1, operator, number2) => {
-  switch (operator) {
-    case '+':
-      return number1 + number2;
-    case '-':
-      return number1 - number2;
-    case '*':
-      return number1 * number2;
-    default:
-      return NaN;
+const MIN_NUMBER = 1;
+const FIRST_MAX_NUMBER = 25;
+const SECOND_MAX_NUMBER = 10;
+
+const calculator = (firstNumber, secondNumber, operation) => {
+  let result;
+  if (operation === '+') {
+    result = firstNumber + secondNumber;
+  } else if (operation === '-') {
+    result = firstNumber - secondNumber;
+  } else {
+    result = firstNumber * secondNumber;
   }
+  return result;
 };
-const playCalc = () => {
-   for (let i = 0; i < 3; i++) {
-    const number1 = generateRandomNumber();
-    const number2 = generateRandomNumber();
-    const operator = generateRandomOperator();
-    const question = `${number1} ${operator} ${number2}`;
-    console.log(`Question: ${question}`);
-    const userAnswer = parseInt(readlineSync.question('Your answer: '), 10);
-    const correctAnswer = calculate(number1, operator, number2);
-    if (userAnswer === correctAnswer) {
-      console.log('Correct!');
-    } else {
-      console.log(`${userAnswer} is wrong answer ;(. Correct answer was ${correctAnswer}.`);
-      console.log(`Let's try again, ${welcome.name}!`);
-      return;
-    }
-  }
-  console.log(`Congratulations, ${welcome.name}!`);
+
+const calculateValueOfExpression = () => {
+  const taskDescription = 'What is the result of the expression?';
+
+  const calcTask = () => {
+    const firstNumber = getRandomNumber(MIN_NUMBER, FIRST_MAX_NUMBER);
+    const secondNumber = getRandomNumber(MIN_NUMBER, SECOND_MAX_NUMBER);
+
+    const operations = ['+', '-', '*'];
+    const operationSelection = getRandomIndex(operations);
+    const operation = operations[operationSelection];
+
+    const question = `${firstNumber} ${operation} ${secondNumber}`;
+
+    const result = String(calculator(firstNumber, secondNumber, operation));
+    return [question, result];
+  };
+
+  runBasisOfGameAndGameGeneration(taskDescription, calcTask);
 };
-export default playCalc;
+
+export default calculateValueOfExpression;
