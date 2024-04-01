@@ -16,7 +16,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-python@v3
+      - uses: hexlet/project-action@release
 
       - name: Hexlet project check
         uses: hexlet/project-action@release
