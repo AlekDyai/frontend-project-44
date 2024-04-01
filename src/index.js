@@ -8,7 +8,7 @@ const runBasisOfGameAndGameGeneration = (taskDescription, task) => {
   const name = readlineSync.question('May I have your name? ');
   console.log(`Hello, ${name}!`);
 
-  console.log(taskDescription);
+  console.log(taskDescription); 
 
   for (let i = 0; i < NUMBER_OF_ROUNDS; i += 1) {
     const [expression, correctAnswer] = task();
