@@ -1,37 +1,21 @@
-import runBasisOfGameAndGameGeneration from '../index.js';
-import { getRandomNumber } from '../utils.js';
+import startBrainGame from '../index.js';
+import getRandomInteger from '../utils.js';
 
-const MIN_NUMBER = 1;
-const MAX_NUMBER = 101;
+const instruction = 'Answer "yes" if given number is prime. Otherwise answer "no".';
 
-const isPrime = (number) => {
-  if (number === 1) {
-    return false;
-  } if (number === 2) {
-    return true;
+const isPrime = (num) => {
+  for (let i = 2, s = Math.sqrt(num); i <= s; i += 1) {
+    if (num % i === 0) return false;
   }
-
-  for (let i = 2; i < number; i += 1) {
-    if (number % i === 0) {
-      return false;
-    }
-  }
-  return true;
+  return num > 1;
 };
 
-const recognizePrimeNumber = () => {
-  const taskDescription = 'Answer "yes" if given number is prime. Otherwise answer "no".';
-
-  const primeTask = () => {
-    const number = getRandomNumber(MIN_NUMBER, MAX_NUMBER);
-
-    const question = `Question: ${number}`;
-
-    const result = isPrime(number) ? 'yes' : 'no';
-    return [question, result];
-  };
-
-  runBasisOfGameAndGameGeneration(taskDescription, primeTask);
+const getGameData = () => {
+  const question = getRandomInteger(1, 100);
+  const answer = isPrime(question) ? 'yes' : 'no';
+  return [question, String(answer)];
 };
 
-export default recognizePrimeNumber;
+const runGamePrime = () => startBrainGame(instruction, getGameData);
+
+export default runGamePrime;

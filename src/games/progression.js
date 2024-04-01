@@ -1,43 +1,24 @@
-import runBasisOfGameAndGameGeneration from '../index.js';
-import { getRandomNumber, getRandomIndex } from '../utils.js';
+import startBrainGame from '../index.js';
+import getRandomInteger from '../utils.js';
 
-const minAmountElements = 5;
-const maxAmountElements = 10;
-const minElement = 1;
-const maxElement = 20;
-const minDifference = 1;
-const maxDifference = 10;
+const instruction = 'What number is missing in the progression?';
 
-const makeProgression = (length, element, step) => {
-  let firstElement = element;
-  const progression = [];
-  progression.push(firstElement);
-  while (progression.length < length) {
-    firstElement += step;
-    progression.push(firstElement);
-  }
-  return progression;
+const getProgression = (start, step, length, hiddenIndex) => {
+  const progression = Array(length).fill(0).map((_, i) => start + (step * i));
+  progression[hiddenIndex] = '..';
+  return progression.join(' ');
 };
 
-const findMissingNumber = () => {
-  const taskDescription = 'What number is missing in the progression?';
-
-  const progressionTask = () => {
-    const progressionLength = getRandomNumber(minAmountElements, maxAmountElements);
-    const element = getRandomNumber(minElement, maxElement);
-    const progressionStep = getRandomNumber(minDifference, maxDifference);
-
-    const numberProgression = makeProgression(progressionLength, element, progressionStep);
-
-    const positionOfHiddenElement = getRandomIndex(numberProgression);
-    const result = String(numberProgression[positionOfHiddenElement]);
-    numberProgression[positionOfHiddenElement] = '..';
-    const question = `Question: ${numberProgression.join(' ')}`;
-
-    return [question, result];
-  };
-
-  runBasisOfGameAndGameGeneration(taskDescription, progressionTask);
+const getGameData = () => {
+  const starNum = getRandomInteger(1, 10);
+  const randStep = getRandomInteger(1, 5);
+  const randLength = getRandomInteger(5, 10);
+  const randHiddenNum = getRandomInteger(2, randLength - 1);
+  const question = getProgression(starNum, randStep, randLength, randHiddenNum);
+  const answer = starNum + randStep * randHiddenNum;
+  return [question, String(answer)];
 };
 
-export default findMissingNumber;
+const runGameProgression = () => startBrainGame(instruction, getGameData);
+
+export default runGameProgression;
